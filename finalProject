@@ -1,0 +1,212 @@
+import math
+
+
+#create a Complete Binary Tree from its linked list representation
+
+# Linked List node
+class Node:
+    def __init__(self, key=None, next=None):
+        self.key = key
+        self.next = next
+        
+
+# Binary Tree Node structure
+class BinaryTreeNode:
+
+    # Constructor to create a new node
+    def __init__(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
+
+# Class to convert the linked list to Binary Tree
+class Conversion:
+
+    # Constructor for storing head of linked list and root for the Binary Tree
+    def __init__(self, data = None):
+        self.head = None
+        self.root = None
+
+    def push(self, new_data):
+
+        # Creating a new linked list node and storing data
+        new_node = Node(new_data)
+
+        # Make next of new node as head
+        new_node.next = self.head
+
+        # Move the head to point to new node
+        self.head = new_node
+
+
+    def rootNode(self):
+        q = []
+
+        # Base Case
+        if self.head is None:
+            self.root = None
+            return
+
+        # 1. The first node is always the root node, and add it to the queue
+        self.root = BinaryTreeNode(self.head.key)
+        q.append(self.root)
+
+        # Advance the pointer to the next node
+        self.head = self.head.next
+
+    def convertList2Binary(self):
+
+        # Queue to store the parent nodes
+        q = []
+
+        # Base Case
+        if self.head is None:
+            self.root = None
+            return
+
+        # 1. The first node is always the root node, and add it to the queue
+        self.root = BinaryTreeNode(self.head.key)
+        q.append(self.root)
+
+        # Advance the pointer to the next node
+        self.head = self.head.next
+
+        # Until the end of linked list is reached, do:
+        while(self.head):
+
+            # 2.a) Take the parent node from the q and remove it from q
+            parent = q.pop(0) # Front of queue
+
+            # 2.c) Take next two nodes from the linked list.
+            # I will add them as children of the current parent node in step 2.b.
+            # Push them into the queue so that they will be parent to the future node
+            leftChild= None
+            rightChild = None
+
+            leftChild = BinaryTreeNode(self.head.key)
+            q.append(leftChild)
+            self.head = self.head.next
+            if(self.head):
+                rightChild = BinaryTreeNode(self.head.key)
+                q.append(rightChild)
+                self.head = self.head.next
+
+            #2.b) Assign the left and right children of parent
+            parent.left = leftChild
+            parent.right = rightChild
+
+def findParent(node,index):
+
+    if index <= 0 :
+        raise ValueError("unvalid index")
+
+    p = node
+    count = 0
+
+    while(count != math.floor((index - 1) / 2)):
+        if p.next is None:
+            raise ValueError("unvalid index")
+        p = p.next
+        count += 1
+    print(p.key)
+
+def findLeftChild(node,index):
+
+    if index < 0 :
+        raise ValueError("unvalid index")
+
+    p = node
+    count = 0
+
+    while(count != 2*index+1):
+        if p.next is None:
+            raise ValueError("unvalid index")
+        p = p.next
+        count += 1
+    print(p.key)
+
+def findRightChild(node,index):
+
+    if index < 0 :
+        raise ValueError("unvalid index")
+
+    p = node
+    count = 0
+
+    while(count != 2*index+2):
+        if p.next is None:
+            raise ValueError("unvalid index")
+        p = p.next
+        count += 1
+    print(p.key)
+
+#Find the parent of the given node
+# def findParent(node, val, parent = -1):
+#     if (node is None):
+#         return
+
+#     # If current node is the required node
+#     if (node.key == val):
+
+#         # Print its parent
+#         print(parent)
+#     else:
+
+#         # Recursive calls for the children of the current node
+#         # Current node is now the new parent
+#         findParent(node.left, val, node.key)
+#         findParent(node.right, val, node.key)
+
+# #Find the left child of the given node
+# def findLeftChild(node, val):
+#     if (node.left is None):
+#         raise ValueError("node is not in the tree") 
+
+#     # If current node is the required node
+#     if (node.key == val):
+
+#         # Print its parent
+#         print(node.left.key)
+#     else:
+
+#         # Recursive calls for the children of the current node
+#         # Current node is now the new parent
+#         findParent(node.left, val)
+#         findParent(node.right, val)
+
+# #Find the right child of the given node
+# def findRightChild(node):
+#         if (node is None):
+#             raise ValueError("node is not in the tree")
+#         elif (node.right is None):
+#             raise ValueError("node doesn't have right child")
+#         else:
+#             print(node.right.key)
+
+
+
+
+
+
+
+
+
+# Driver code
+if __name__ == "__main__":
+
+    conv = Conversion()
+    conv.push(36)
+    conv.push(30)
+    conv.push(25)
+    conv.push(15)
+    conv.push(12)
+    conv.push(10)
+
+    # conv.convertList2Binary()
+    i = 1
+
+
+    # findParent(conv.root, node)
+    findParent(conv.head,i)
+
+
