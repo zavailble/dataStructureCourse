@@ -1,5 +1,6 @@
+from findNodeMethod import *
 import math
-
+import time
 
 #create a Complete Binary Tree from its linked list representation
 
@@ -11,32 +12,46 @@ class Node:
         
 
 # Binary Tree Node structure
-class BinaryTreeNode:
+class BinaryTreeNode(Node):
 
     # Constructor to create a new node
     def __init__(self, key):
+        super().__init__()
         self.key = key
         self.left = None
         self.right = None
 
+
+    
+ 
+
 # Class to convert the linked list to Binary Tree
-class Conversion:
+class Conversion(BinaryTreeNode):
 
     # Constructor for storing head of linked list and root for the Binary Tree
     def __init__(self, data = None):
+
         self.head = None
         self.root = None
+        self.rootHeap = None
+        
 
-    def push(self, new_data):
 
-        # Creating a new linked list node and storing data
-        new_node = Node(new_data)
 
-        # Make next of new node as head
-        new_node.next = self.head
 
-        # Move the head to point to new node
-        self.head = new_node
+
+    def append(self,node):
+        if node is None:
+            return 
+        node = BinaryTreeNode(node)
+        if self.head is None:
+            self.head = node
+            return node
+        curr_node = self.head
+        while curr_node.next is not None:
+            curr_node = curr_node.next
+        curr_node.next = node
+        return node
 
 
     def rootNode(self):
@@ -54,159 +69,222 @@ class Conversion:
         # Advance the pointer to the next node
         self.head = self.head.next
 
-    def convertList2Binary(self):
+    # def convertList2Binary(self):
 
-        # Queue to store the parent nodes
-        q = []
+    #     # Queue to store the parent nodes
+    #     q = []
 
-        # Base Case
+    #     # Base Case
+    #     if self.head is None:
+    #         self.root = None
+    #         return
+
+    #     # 1. The first node is always the root node, and add it to the queue
+    #     self.root = BinaryTreeNode(self.head.key)
+    #     q.append(self.root)
+
+    #     # Advance the pointer to the next node
+    #     self.head = self.head.next
+
+    #     # Until the end of linked list is reached, do:
+    #     while(self.head):
+
+    #         # 2.a) Take the parent node from the q and remove it from q
+    #         parent = q.pop(0) # Front of queue
+
+    #         # 2.c) Take next two nodes from the linked list.
+    #         # I will add them as children of the current parent node in step 2.b.
+    #         # append them into the queue so that they will be parent to the future node
+    #         leftChild= None
+    #         rightChild = None
+
+    #         leftChild = BinaryTreeNode(self.head.key)
+    #         q.append(leftChild)
+    #         self.head = self.head.next
+    #         if(self.head):
+    #             rightChild = BinaryTreeNode(self.head.key)
+    #             q.append(rightChild)
+    #             self.head = self.head.next
+
+    #         #2.b) Assign the left and right children of parent
+    #         parent.left = leftChild
+    #         parent.right = rightChild
+    
+
+    def convert_Linkedlist_2_CBT(self):
         if self.head is None:
             self.root = None
             return
+        self.root = self.head    
+        p = self.head
+        index = 0
+        while(p):
+            count = 0
+            leftchild = self.head
 
-        # 1. The first node is always the root node, and add it to the queue
-        self.root = BinaryTreeNode(self.head.key)
-        q.append(self.root)
+            while (count != 2*index+1 and leftchild.next is not None):
+                leftchild = leftchild.next
+                count +=1 
 
-        # Advance the pointer to the next node
-        self.head = self.head.next
+            if (count == 2*index +1):
+                p.left = leftchild
 
-        # Until the end of linked list is reached, do:
-        while(self.head):
+            if (leftchild.next is not None):                
+                p.right = leftchild.next    
 
-            # 2.a) Take the parent node from the q and remove it from q
-            parent = q.pop(0) # Front of queue
+            index += 1
+            p = p.next    
+    def tree_height(self):
+        p = self.root
+        if (p is None):
+            return 0
+        elif (p.next is None):
+            return 1
+        
+        else: 
+            count = 1   
+            while(p.next):
+                count +=1
+                p = p.next
+            height = math.floor(math.log2(count))
+            return height    
 
-            # 2.c) Take next two nodes from the linked list.
-            # I will add them as children of the current parent node in step 2.b.
-            # Push them into the queue so that they will be parent to the future node
-            leftChild= None
-            rightChild = None
+    def convert_CBT_2_MinimumPq(self):
+        def dfs(node):
+            if not node:
+                return
+            dfs(node.right)
+            dfs(node.left)
 
-            leftChild = BinaryTreeNode(self.head.key)
-            q.append(leftChild)
-            self.head = self.head.next
-            if(self.head):
-                rightChild = BinaryTreeNode(self.head.key)
-                q.append(rightChild)
-                self.head = self.head.next
+            if (node.left is not None):
+                if (node.key > node.left.key):
+                    p = node.key
+                    node.key = node.left.key
+                    node.left.key = p
+                    dfs(node.left)
+            if (node.right is not None):
+                if (node.key > node.right.key):
+                    p = node.key
+                    node.key = node.right.key
+                    node.right.key = p        
+        for i in range(self.tree_height()):            
+            dfs(self.root)
 
-            #2.b) Assign the left and right children of parent
-            parent.left = leftChild
-            parent.right = rightChild
 
-def findParent(node,index):
+    def delMin(self):
+        p = self.head         
+        while(p.next):
+            p = p.next
+        self.root = p
+        p = None
+        self.convert_CBT_2_MinimumPq()
 
-    if index <= 0 :
-        raise ValueError("unvalid index")
+    def insert(self,node):
+        conv.append(node)
+        conv.convert_Linkedlist_2_CBT()
+        conv.convert_CBT_2_MinimumPq()
+        
 
-    p = node
-    count = 0
+    def inorderTraversal(self, root):
+        if(root):
+            self.inorderTraversal(root.left)
+            print (root.key,end=" ")
+            self.inorderTraversal(root.right)
 
-    while(count != math.floor((index - 1) / 2)):
-        if p.next is None:
-            raise ValueError("unvalid index")
-        p = p.next
-        count += 1
-    print(p.key)
-
-def findLeftChild(node,index):
-
-    if index < 0 :
-        raise ValueError("unvalid index")
-
-    p = node
-    count = 0
-
-    while(count != 2*index+1):
-        if p.next is None:
-            raise ValueError("unvalid index")
-        p = p.next
-        count += 1
-    print(p.key)
-
-def findRightChild(node,index):
-
-    if index < 0 :
-        raise ValueError("unvalid index")
-
-    p = node
-    count = 0
-
-    while(count != 2*index+2):
-        if p.next is None:
-            raise ValueError("unvalid index")
-        p = p.next
-        count += 1
-    print(p.key)
-
-#Find the parent of the given node
-# def findParent(node, val, parent = -1):
-#     if (node is None):
-#         return
-
-#     # If current node is the required node
-#     if (node.key == val):
-
-#         # Print its parent
-#         print(parent)
-#     else:
-
-#         # Recursive calls for the children of the current node
-#         # Current node is now the new parent
-#         findParent(node.left, val, node.key)
-#         findParent(node.right, val, node.key)
-
-# #Find the left child of the given node
-# def findLeftChild(node, val):
-#     if (node.left is None):
-#         raise ValueError("node is not in the tree") 
-
-#     # If current node is the required node
-#     if (node.key == val):
-
-#         # Print its parent
-#         print(node.left.key)
-#     else:
-
-#         # Recursive calls for the children of the current node
-#         # Current node is now the new parent
-#         findParent(node.left, val)
-#         findParent(node.right, val)
-
-# #Find the right child of the given node
-# def findRightChild(node):
-#         if (node is None):
-#             raise ValueError("node is not in the tree")
-#         elif (node.right is None):
-#             raise ValueError("node doesn't have right child")
-#         else:
-#             print(node.right.key)
+    def preorderTraversal(self, root):
+        if(root):
+            print (root.key,end=" ")
+            self.preorderTraversal(root.left)
+            self.preorderTraversal(root.right)
 
 
 
 
 
 
+# def convert_CBT_2_MinimumPq(node):
+
+#     def dfs(node):
+
+#         if not node:
+#             return
+
+#         dfs(node.right)
+#         dfs(node.left)
+
+#         if (node.left is not None):
+#             if (node.key > node.left.key):
+#                 p = node.key
+#                 node.key = node.left.key
+#                 node.left.key = p
+
+#         if (node.right is not None):
+#             if (node.key > node.right.key):
+#                 p = node.key
+#                 node.key = node.right.key
+#                 node.right.key = p
+
+#     dfs(node)
+
+
+def performance_test():
+    start = int(round(time.time() * 1000))
+    start = int(round(time.time() * 1000))
+    conv = Conversion()
+    conv.append(100)
+    conv.append(30)
+    conv.append(25)
+    conv.append(15)
+    conv.append(12)
+    conv.append(10)
+    
+
+    conv.convert_Linkedlist_2_CBT()
+    conv.convert_CBT_2_MinimumPq()
+    end = int(round(time.time() * 1000))
+    print(f'{end - start}ms')
 
 
 
-# Driver code
+
+
+
+# # Driver code
 if __name__ == "__main__":
 
-    conv = Conversion()
-    conv.push(36)
-    conv.push(30)
-    conv.push(25)
-    conv.push(15)
-    conv.push(12)
-    conv.push(10)
+    # conv = Conversion()
+    # conv.append(36)
+    # conv.append(30)
+    # conv.append(25)
+    # conv.append(15)
+    # conv.append(12)
+    # conv.append(10)
 
     # conv.convertList2Binary()
-    i = 1
+    # i = 3
 
 
-    # findParent(conv.root, node)
-    findParent(conv.head,i)
+    # # findParent(conv.root, node)
+    # findParent(conv.root,i)
 
 
+    conv = Conversion()
+    conv.append(100)
+    conv.append(30)
+    conv.append(25)
+    conv.append(15)
+    conv.append(12)
+    conv.append(10)
+    
+
+    conv.convert_Linkedlist_2_CBT()
+    conv.convert_CBT_2_MinimumPq()
+    
+    # conv.convert_CBT_2_MinimumPq()
+    conv.insert(3)
+    conv.insert(34)
+
+    # print ("Inorder Traversal of the constructed Binary Tree is:")
+    # conv.inorderTraversal(conv.root)
+    performance_test()
+ 
