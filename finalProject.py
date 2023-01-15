@@ -1,7 +1,5 @@
 from findNodeMethod import *
 import math
-import time
-
 #create a Complete Binary Tree from its linked list representation
 
 # Linked List node
@@ -29,18 +27,12 @@ class BinaryTreeNode(Node):
 class Conversion(BinaryTreeNode):
 
     # Constructor for storing head of linked list and root for the Binary Tree
-    def __init__(self, data = None):
-
+    def __init__(self, data = None):        
         self.head = None
         self.root = None
         self.rootHeap = None
         
-
-
-
-
-
-    def append(self,node):
+    def  insert(self,node):
         if node is None:
             return 
         node = BinaryTreeNode(node)
@@ -52,22 +44,6 @@ class Conversion(BinaryTreeNode):
             curr_node = curr_node.next
         curr_node.next = node
         return node
-
-
-    def rootNode(self):
-        q = []
-
-        # Base Case
-        if self.head is None:
-            self.root = None
-            return
-
-        # 1. The first node is always the root node, and add it to the queue
-        self.root = BinaryTreeNode(self.head.key)
-        q.append(self.root)
-
-        # Advance the pointer to the next node
-        self.head = self.head.next
 
     # def convertList2Binary(self):
 
@@ -81,7 +57,7 @@ class Conversion(BinaryTreeNode):
 
     #     # 1. The first node is always the root node, and add it to the queue
     #     self.root = BinaryTreeNode(self.head.key)
-    #     q.append(self.root)
+    #     q. append(self.root)
 
     #     # Advance the pointer to the next node
     #     self.head = self.head.next
@@ -122,18 +98,20 @@ class Conversion(BinaryTreeNode):
             count = 0
             leftchild = self.head
 
-            while (count != 2*index+1 and leftchild.next is not None):
+            while (count != 2*index+1 and leftchild.next is not None and leftchild.next.key is not None):
                 leftchild = leftchild.next
                 count +=1 
 
             if (count == 2*index +1):
                 p.left = leftchild
 
-            if (leftchild.next is not None):                
+            if (leftchild.next is not None and leftchild.next.key is not None):                
                 p.right = leftchild.next    
 
             index += 1
             p = p.next    
+
+
     def tree_height(self):
         p = self.root
         if (p is None):
@@ -149,6 +127,7 @@ class Conversion(BinaryTreeNode):
             height = math.floor(math.log2(count))
             return height    
 
+
     def convert_CBT_2_MinimumPq(self):
         def dfs(node):
             if not node:
@@ -156,7 +135,7 @@ class Conversion(BinaryTreeNode):
             dfs(node.right)
             dfs(node.left)
 
-            if (node.left is not None):
+            if (node.left is not None and node.left.key is not None):
                 if (node.key > node.left.key):
                     p = node.key
                     node.key = node.left.key
@@ -172,17 +151,34 @@ class Conversion(BinaryTreeNode):
 
 
     def delMin(self):
-        p = self.head         
-        while(p.next):
-            p = p.next
-        self.root = p
-        p = None
+        self.root.key = self.root.next.key        
+        self.root.next = self.root.next.next
+        # prev = None
+        # p = self.head 
+        # x = self.root        
+        # while(p.next):
+        #     prev = p
+        #     p = p.next
+        # self.head.key = p.key
+        # p.key = None
+        # prev.next = None
+        # p = None
+        # q = self.head
+        # new_conv = Conversion()
+        # while(q):
+        #     if q:
+        #        new_conv.append(q) 
+        # self = new_conv
+        # q = findParent(self.head,)
+        self.convert_Linkedlist_2_CBT()
         self.convert_CBT_2_MinimumPq()
 
+
+
     def insert(self,node):
-        conv.append(node)
-        conv.convert_Linkedlist_2_CBT()
-        conv.convert_CBT_2_MinimumPq()
+        self.append(node)
+        self.convert_Linkedlist_2_CBT()
+        self.convert_CBT_2_MinimumPq()
         
 
     def inorderTraversal(self, root):
@@ -228,53 +224,60 @@ class Conversion(BinaryTreeNode):
 
 
 def performance_test():
-    start = int(round(time.time() * 1000))
-    start = int(round(time.time() * 1000))
+
     conv = Conversion()
-    conv.append(100)
-    conv.append(30)
-    conv.append(25)
-    conv.append(15)
-    conv.append(12)
-    conv.append(10)
-    
+    conv. insert(36)
+    conv. insert(30)
+    conv. insert(25)
+    conv. insert(15)
+    conv. insert(12)
+    conv. insert(10)
+
 
     conv.convert_Linkedlist_2_CBT()
     conv.convert_CBT_2_MinimumPq()
-    end = int(round(time.time() * 1000))
-    print(f'{end - start}ms')
+
+    conv.insert(3)
+    conv.insert(34)
 
 
+    print ("Inorder Traversal of the constructed Binary Tree is:")
+    conv.inorderTraversal(conv.root)
+
+# def my_test(benchmark):
+#     benchmark(performance_test)
 
 
-
+# def my_test(benchmark):
+#     result = benchmark()
+#     print(result)
 
 # # Driver code
 if __name__ == "__main__":
 
-    # conv = Conversion()
-    # conv.append(36)
-    # conv.append(30)
-    # conv.append(25)
-    # conv.append(15)
-    # conv.append(12)
-    # conv.append(10)
+#     # conv = Conversion()
+#     # conv. insert(36)
+#     # conv. insert(30)
+#     # conv. insert(25)
+#     # conv. insert(15)
+#     # conv. insert(12)
+#     # conv. insert(10)
 
-    # conv.convertList2Binary()
-    # i = 3
+#     # conv.convertList2Binary()
+#     # i = 3
 
 
-    # # findParent(conv.root, node)
-    # findParent(conv.root,i)
+#     # # findParent(conv.root, node)
+#     # findParent(conv.root,i)
 
 
     conv = Conversion()
-    conv.append(100)
-    conv.append(30)
-    conv.append(25)
-    conv.append(15)
-    conv.append(12)
-    conv.append(10)
+    conv. insert(100)
+    conv. insert(30)
+    conv. insert(25)
+    conv. insert(15)
+    conv. insert(12)
+    conv. insert(10)
     
 
     conv.convert_Linkedlist_2_CBT()
@@ -282,9 +285,14 @@ if __name__ == "__main__":
     
     # conv.convert_CBT_2_MinimumPq()
     conv.insert(3)
-    conv.insert(34)
+    conv.insert(4)
 
-    # print ("Inorder Traversal of the constructed Binary Tree is:")
-    # conv.inorderTraversal(conv.root)
-    performance_test()
+    conv.delMin()
+    conv.delMin()
+    conv.delMin()
+
+    print ("Inorder Traversal of the constructed Binary Tree is:")
+    conv.preorderTraversal(conv.root)
+
  
+    # my_test(benchmark=performance_test)
