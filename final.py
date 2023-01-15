@@ -125,52 +125,28 @@ class binaryHeap(completeBinaryTree):
 
     def sink(self, index):
         node = self.getNode(index)
-        # while (2*index+ 1) <= self.size() - 1:
-        #     if 2*index + 1 == self.size() - 1:
-        #         if node.key > self.getNode(2*index + 1).key:
-        #             p = self.head
-        #             while (p.next):
-        #                 p = p.next
-        #             p.key , node.key = node.key ,p.key
-        #         break
-        #     elif node.key > min(self.getNode(2*index + 1).key,self.getNode(2*index + 2).key):
-        #         if self.getNode(2*index + 1).key < self.getNode(2*index + 2).key:
-        #             p = self.getNode(2*index + 1)
-        #             p.key , node.key = node.key ,p.key
-        #             index = 2*index + 1
-        #         else:
-        #             p = self.getNode(2*index + 2)
-        #             p.key , node.key = node.key ,p.key
-        #             index = 2*index + 2
-
         while (2 * index) <= self.size():
             if 2 * index == self.size():
                 if node.key > self.getNode(2 * index).key:
                     p = self.head
                     while (p.next):
                         p = p.next
-                    # p.key , node.key = node.key ,p.key
                     temp = p.key
                     p.key = node.key
                     node.key = temp
-
                 break
             elif node.key > min(self.getNode(2 * index).key, self.getNode(2 * index + 1).key):
                 if self.getNode(2 * index).key < self.getNode(2 * index + 1).key:
                     p = self.getNode(2 * index)
-                    # p.key , node.key = node.key ,p.key
                     temp = p.key
                     p.key = node.key
                     node.key = temp
-
                     index = 2 * index
                 else:
                     p = self.getNode(2 * index + 1)
-                    # p.key , node.key = node.key ,p.key
                     temp = p.key
                     p.key = node.key
                     node.key = temp
-
                     index = 2 * index + 1
                 node = self.getNode(index)
             else:
@@ -178,10 +154,9 @@ class binaryHeap(completeBinaryTree):
 
     def insert(self, node):
         self.append(node)
-        # index = self.getIndex(node)
         index = self.size()
-
         self.swim(index)
+
 
     def delMin(self):
         result = self.head.key
@@ -192,10 +167,6 @@ class binaryHeap(completeBinaryTree):
             p = p.next
         self.head.key = p.key
         prev.next = None
-
-        # print(self)
-
-        # self.sink(0)
         self.sink(1)
         return result
 
