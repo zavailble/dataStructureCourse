@@ -120,13 +120,13 @@ def findRightChild(node,index):
 #         findParent(node.right, val)
 
 # #Find the right child of the given node
-# def findRightChild(node):
-#         if (node is None):
-#             raise ValueError("node is not in the tree")
-#         elif (node.right is None):
-#             raise ValueError("node doesn't have right child")
-#         else:
-#             print(node.right.key)
+def findRightChild(node):
+        if (node is None):
+            raise ValueError("node is not in the tree")
+        elif (node.right is None):
+            raise ValueError("node doesn't have right child")
+        else:
+            print(node.right.key)
 
 
 
